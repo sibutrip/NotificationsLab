@@ -9,42 +9,53 @@ import Foundation
 import CoreLocation
 import MapKit
 
-enum NotificationSelection: String, CaseIterable, Identifiable {
-    var id: String { self.rawValue }
-    case date, timer, location
-}
-
 @MainActor
 class ViewModel: NSObject, ObservableObject {
-    let locationManager = CLLocationManager()
+    
+    enum NotificationSelection: String, CaseIterable, Identifiable {
+        var id: String { self.rawValue }
+        case date, timer, location
+    }
+    
+    private let locationManager = CLLocationManager()
+    
     @Published var notifications: [Notification] = []
     
     @Published var notificatonSelected = NotificationSelection.date
     
-    @Published var scheduleOnADate = false
     @Published var date = Date()
-        
-    @Published var scheduleAtAnInterval = false
     @Published var timeInterval = Int()
-    
-    @Published var scheduleAtALocation = false
     @Published var mapArea = MKMapRect()
     
     var location: CLLocation? {
         locationManager.location
     }
     
-    func scheduleNotification() {
-//        switch daEnum {
-//            calendarNotification()
-//            timernotificaitowengoiewf()
-//            the other one()
-//        }
-        // TODO: schedule the local notifications: 1- Calendar notification, 2- Time interval notification 3- Location notification.
+    private func createCalendarNotification() {
+        // TODO: Create a calendar notification
+        // https://developer.apple.com/documentation/usernotifications/scheduling_a_notification_locally_from_your_app
+    }
+    private func createTimerNotification() {
+        // TODO: Create a time interval notification
+        // https://developer.apple.com/documentation/usernotifications/scheduling_a_notification_locally_from_your_app
+    }
+    func createLocationNotification() {
+        // TODO: Create a location-based notification
         // https://developer.apple.com/documentation/usernotifications/scheduling_a_notification_locally_from_your_app
     }
     
-    func requestLocation () {
+    public func scheduleNotification() {
+        switch notificatonSelected {
+        case .date:
+            createCalendarNotification()
+        case .timer:
+            createTimerNotification()
+        case .location:
+            createLocationNotification()
+        }
+    }
+    
+    public func requestLocation () {
         locationManager.requestWhenInUseAuthorization()
     }
     

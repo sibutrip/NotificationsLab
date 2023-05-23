@@ -14,28 +14,39 @@ struct AddNotificationView: View {
     @ObservedObject var vm: ViewModel
     
     var body: some View {
-        Form {
-            Picker("Notification Type", selection: $vm.notificatonSelected) {
-                ForEach(NotificationSelection.allCases) {
-                    Text($0.rawValue)
-                        .tag($0)
-                }
-            }
-            switch vm.notificatonSelected {
-            case .date:
-                DatePicker("Date", selection: $vm.date)
-            case .location:
-                Map(mapRect: $vm.mapArea, showsUserLocation: true)
-                    .frame(height: 400)
-                    .onAppear { vm.requestLocation() }
-            case .timer:
-                Picker("Timer", selection: $vm.timeInterval) {
-                    ForEach(0...120, id: \.self) {
-                        Text("\($0.description) min")
+        NavigationStack {
+            Form {
+                Section {
+                    Picker("Notification Type", selection: $vm.notificatonSelected) {
+                        ForEach(ViewModel.NotificationSelection.allCases) {
+                            Text($0.rawValue)
+                                .tag($0)
+                        }
+                    }
+                    switch vm.notificatonSelected {
+                    case .date:
+                        DatePicker("Date", selection: $vm.date)
+                    case .location:
+                        Map(mapRect: $vm.mapArea, showsUserLocation: true)
+                            .frame(height: 400)
+                            .onAppear { vm.requestLocation() }
+                    case .timer:
+                        Picker("Timer", selection: $vm.timeInterval) {
+                            ForEach(0...120, id: \.self) {
+                                Text("\($0.description) min")
+                            }
+                        }
+                        
                     }
                 }
-                
+                Section {
+                    Button("Schedule Notification") {
+                        vm.scheduleNotification()
+                    }
+                }
             }
+            .navigationTitle("Create a Notification")
+            .navigationBarTitleDisplayMode(.inline)
         }
     }
 }
