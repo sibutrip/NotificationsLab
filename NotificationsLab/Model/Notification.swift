@@ -21,7 +21,7 @@ struct Notification: Identifiable {
             return ("time interval scheduled:  \(timeInterval!.description) mins")
         }
         if let location = location {
-            return ("location scheduled:  \(location.description)")
+            return ("location scheduled:  latitude \(location.coordinate.latitude), longitude \(location.coordinate.longitude)")
         } else {
             return "No Location"
         }
