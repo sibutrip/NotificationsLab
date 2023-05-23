@@ -9,14 +9,21 @@ import Foundation
 import CoreLocation
 import MapKit
 
+enum NotificationSelection: String, CaseIterable, Identifiable {
+    var id: String { self.rawValue }
+    case date, timer, location
+}
+
 @MainActor
 class ViewModel: NSObject, ObservableObject {
     let locationManager = CLLocationManager()
-    @Published var activities: [Notification] = []
+    @Published var notifications: [Notification] = []
     
-    @Published var scheduleAtATime = false
+    @Published var notificatonSelected = NotificationSelection.date
+    
+    @Published var scheduleOnADate = false
     @Published var date = Date()
-    
+        
     @Published var scheduleAtAnInterval = false
     @Published var timeInterval = Int()
     
@@ -28,12 +35,13 @@ class ViewModel: NSObject, ObservableObject {
     }
     
     func scheduleNotification() {
+//        switch daEnum {
+//            calendarNotification()
+//            timernotificaitowengoiewf()
+//            the other one()
+//        }
         // TODO: schedule the local notifications: 1- Calendar notification, 2- Time interval notification 3- Location notification.
         // https://developer.apple.com/documentation/usernotifications/scheduling_a_notification_locally_from_your_app
-    }
-    
-    func createActivity(for activity: String, at date: Date, isRepeating: Bool) {
-        activities.append(Notification(name: activity, dateScheduled: date, isRepeating: isRepeating))
     }
     
     func requestLocation () {

@@ -15,60 +15,26 @@ struct AddNotificationView: View {
     
     var body: some View {
         Form {
-            Section {
-                Toggle(isOn: $vm.scheduleAtATime) {
-                    Label("Date", systemImage: "calendar")
-                }
-                if vm.scheduleAtATime {
-                    DatePicker("Schedule", selection: $vm.date)
+            Picker("Notification Type", selection: $vm.notificatonSelected) {
+                ForEach(NotificationSelection.allCases) {
+                    Text($0.rawValue)
+                        .tag($0)
                 }
             }
-            Section {
-                Toggle(isOn: $vm.scheduleAtAnInterval) {
-                    Label("Timer", systemImage: "timer")
-                }
-                if vm.scheduleAtAnInterval {
-                    Picker("Interval", selection: $vm.timeInterval) {
-                        ForEach(0...120, id: \.self) {
-                            Text("\($0.description) min")
-                        }
+            switch vm.notificatonSelected {
+            case .date:
+                DatePicker("Date", selection: $vm.date)
+            case .location:
+                Map(mapRect: $vm.mapArea, showsUserLocation: true)
+                    .frame(height: 400)
+                    .onAppear { vm.requestLocation() }
+            case .timer:
+                Picker("Timer", selection: $vm.timeInterval) {
+                    ForEach(0...120, id: \.self) {
+                        Text("\($0.description) min")
                     }
                 }
-            }
-            Section {
-                Toggle(isOn: $vm.scheduleAtALocation) {
-                    Label("Location", systemImage: "location")
-                }
-                if vm.scheduleAtALocation {
-                    Map(mapRect: $vm.mapArea, showsUserLocation: true)
-                        .frame(height: 400)
-                }
-            }
-            if vm.scheduleAtATime || vm.scheduleAtALocation || vm.scheduleAtAnInterval {
-                Button("Schedule Notification") {
-                    vm.scheduleNotification()
-                }
-                .frame(maxWidth: .infinity)
-                .frame(alignment: .center)
-            }
-        }
-        .onChange(of: vm.scheduleAtAnInterval) { _ in
-            if vm.scheduleAtAnInterval {
-                vm.scheduleAtATime = false
-                vm.scheduleAtALocation = false
-            }
-        }
-        .onChange(of: vm.scheduleAtATime) { _ in
-            if vm.scheduleAtATime {
-                vm.scheduleAtAnInterval = false
-                vm.scheduleAtALocation = false
-            }
-        }
-        .onChange(of: vm.scheduleAtALocation) { _ in
-            if vm.scheduleAtALocation {
-                vm.scheduleAtATime = false
-                vm.scheduleAtAnInterval = false
-                vm.requestLocation()
+                
             }
         }
     }

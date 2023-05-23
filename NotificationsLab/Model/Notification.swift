@@ -6,10 +6,20 @@
 //
 
 import Foundation
+import CoreLocation
 
 struct Notification: Identifiable {
     let id = UUID()
-    let name: String
-    let dateScheduled: Date
-    let isRepeating: Bool
+    var dateScheduled: Date?
+    var timeInterval: Int?
+    var location: CLLocation?
+    var description: String {
+        if dateScheduled != nil {
+            return dateScheduled!.description
+        }
+        if timeInterval != nil {
+            return timeInterval!.description
+        }
+        return location!.description
+    }
 }

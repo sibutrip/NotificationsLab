@@ -16,15 +16,12 @@ struct ContentView: View {
     var body: some View {
         NavigationStack {
             Group {
-                if vm.activities.isEmpty {
+                if vm.notifications.isEmpty {
                     Text("Schedule a Notification!")
                 } else {
-                    List(vm.activities) { activity in
+                    List(vm.notifications) { notification in
                         VStack {
-                            Text(activity.name)
-                            Text(activity.dateScheduled.description(with: .autoupdatingCurrent))
-                                .font(.caption)
-                                .foregroundColor(.secondary)
+                            Text(notification.description)
                         }
                     }
                 }

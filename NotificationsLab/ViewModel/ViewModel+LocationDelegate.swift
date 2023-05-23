@@ -25,7 +25,10 @@ extension ViewModel: CLLocationManagerDelegate {
             self.mapArea = MKMapRect(origin: MKMapPoint(manager.location!.coordinate), size: .init(width: 2500, height: 2500))
         @unknown default:
             print("unknown")
-
         }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        print(error.localizedDescription)
     }
 }
