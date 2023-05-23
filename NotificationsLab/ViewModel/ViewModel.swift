@@ -21,7 +21,7 @@ class ViewModel: NSObject, ObservableObject {
     
     private let locationManager = CLLocationManager()
     
-    @Published var notifications: [Notification] = []
+    @Published var notifications: [NotificationItem] = []
     
     @Published var notificatonSelected = NotificationSelection.date
     
@@ -46,17 +46,25 @@ class ViewModel: NSObject, ObservableObject {
         // https://developer.apple.com/documentation/usernotifications/scheduling_a_notification_locally_from_your_app
     }
     
+    func cancelNotification(_ notification: NotificationItem) {
+        // TODO: Cancel the scheduled notification request
+        // https://developer.apple.com/documentation/usernotifications/scheduling_a_notification_locally_from_your_app#2980216
+        notifications.removeAll {
+            $0.id == notification.id
+        }
+    }
+    
     public func scheduleNotification() {
         switch notificatonSelected {
         case .date:
             createCalendarNotification()
-            notifications.append(Notification(dateScheduled: date))
+            notifications.append(NotificationItem(dateScheduled: date))
         case .timer:
             createTimerNotification()
-            notifications.append(Notification(timeInterval: timeInterval))
+            notifications.append(NotificationItem(timeInterval: timeInterval))
         case .location:
             createLocationNotification()
-            notifications.append(Notification(location: location))
+            notifications.append(NotificationItem(location: location))
         }
     }
     
@@ -69,6 +77,3 @@ class ViewModel: NSObject, ObservableObject {
         locationManager.delegate = self
     }
 }
-
-
-

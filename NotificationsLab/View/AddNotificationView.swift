@@ -11,6 +11,8 @@ import MapKit
 
 struct AddNotificationView: View {
     
+    @Environment(\.dismiss) var dismiss
+    
     @ObservedObject var vm: ViewModel
     
     var body: some View {
@@ -42,6 +44,7 @@ struct AddNotificationView: View {
                 Section {
                     Button("Schedule Notification") {
                         vm.scheduleNotification()
+                        dismiss()
                     }
                     .frame(maxWidth: .infinity, alignment: .center)
                 }

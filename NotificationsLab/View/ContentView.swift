@@ -19,9 +19,15 @@ struct ContentView: View {
                 if vm.notifications.isEmpty {
                     Text("Schedule a Notification!")
                 } else {
-                    List(vm.notifications) { notification in
-                        VStack {
-                            Text(notification.description)
+                    List {
+                        ForEach(0..<vm.notifications.count, id: \.self) { index in
+                            let notification = vm.notifications[index]
+                            VStack {
+                                Text(notification.description)
+                            }
+                        }.onDelete { index in
+                            let notification = vm.notifications[index.first!]
+                            vm.cancelNotification(notification)
                         }
                     }
                 }

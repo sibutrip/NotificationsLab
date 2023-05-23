@@ -8,7 +8,7 @@
 import Foundation
 import CoreLocation
 
-struct Notification: Identifiable {
+struct NotificationItem: Identifiable {
     let id = UUID()
     var dateScheduled: Date?
     var timeInterval: Int?
