@@ -15,6 +15,9 @@ struct AddNotificationView: View {
     
     @ObservedObject var vm: ViewModel
     
+    @State var scheduleNotificationFail = false
+    @State var scheduleNotificationFailDescription = ""
+    
     var body: some View {
         NavigationStack {
             Form {
@@ -44,7 +47,17 @@ struct AddNotificationView: View {
                 }
                 Section {
                     Button("Schedule Notification") {
-                        vm.scheduleNotification()
+                        Task {
+                            
+                            // Handle the errors by catching them and setting "scheduleNotificationFail" to true
+                            do {
+                                try await vm.scheduleNotification()
+                            } catch(let error) {
+                                scheduleNotificationFail = true
+                                scheduleNotificationFailDescription = error.localizedDescription
+                                print(scheduleNotificationFailDescription)
+                            }
+                        }
                         dismiss()
                     }
                     .disabled(vm.title.isEmpty || vm.body.isEmpty)
@@ -53,6 +66,13 @@ struct AddNotificationView: View {
             }
             .navigationTitle("Create a Notification")
             .navigationBarTitleDisplayMode(.inline)
+            
+            // Display the error description in an alert
+            .alert(scheduleNotificationFailDescription, isPresented: $scheduleNotificationFail) {
+                Button("ok") {
+                    scheduleNotificationFail = false
+                }
+            }
         }
     }
 }

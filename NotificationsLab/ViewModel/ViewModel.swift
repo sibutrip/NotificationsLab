@@ -36,39 +36,108 @@ class ViewModel: NSObject, ObservableObject {
         locationManager.location
     }
     
-    private func createCalendarNotification() {
+    private func createCalendarNotification(_ notification: NotificationItem) async throws {
         // TODO: Create a calendar notification
         // https://developer.apple.com/documentation/usernotifications/scheduling_a_notification_locally_from_your_app
         
+        let content = UNMutableNotificationContent()
+        content.title = title
+        content.body = body
+        
+        // Create the DateComponents from the specified date
+        let dateComponents = Calendar.current.dateComponents(in: .autoupdatingCurrent, from: date)
+        
+        let trigger = UNCalendarNotificationTrigger(
+                 dateMatching: dateComponents, repeats: false)
+        
+        // Create the request
+        let request = UNNotificationRequest(identifier: notification.id.uuidString,
+                    content: content, trigger: trigger)
+
+        // Schedule the request with the system.
+        let notificationCenter = UNUserNotificationCenter.current()
+        try await notificationCenter.add(request)
+        
     }
-    private func createTimerNotification() {
+    
+    private func createTimerNotification(_ notification: NotificationItem) async throws {
         // TODO: Create a time interval notification
         // https://developer.apple.com/documentation/usernotifications/scheduling_a_notification_locally_from_your_app
+        
+        let content = UNMutableNotificationContent()
+        content.title = title
+        content.body = body
+        
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: Double(timeInterval), repeats: false)
+        
+        // Create the request
+        let request = UNNotificationRequest(identifier: notification.id.uuidString,
+                    content: content, trigger: trigger)
+
+        // Schedule the request with the system.
+        let notificationCenter = UNUserNotificationCenter.current()
+        try await notificationCenter.add(request)
     }
-    func createLocationNotification() {
+    
+    func createLocationNotification(_ notification: NotificationItem) async throws {
         // TODO: Create a location-based notification
         // https://developer.apple.com/documentation/usernotifications/scheduling_a_notification_locally_from_your_app
+        
+        let content = UNMutableNotificationContent()
+        content.title = title
+        content.body = body
+        
+        // Create a CLRegion from the user's location
+        let center = location!.coordinate
+        let region = CLCircularRegion(center: center, radius: 2000.0, identifier: "Region")
+        region.notifyOnEntry = true
+        region.notifyOnExit = false
+        
+        let trigger = UNLocationNotificationTrigger(region: region, repeats: false)
+        
+        // Create the request
+        let request = UNNotificationRequest(identifier: notification.id.uuidString,
+                    content: content, trigger: trigger)
+
+        // Schedule the request with the system.
+        let notificationCenter = UNUserNotificationCenter.current()
+        try await notificationCenter.add(request)
+        
     }
     
     func cancelNotification(_ notification: NotificationItem) {
         // TODO: Cancel the scheduled notification request
         // https://developer.apple.com/documentation/usernotifications/scheduling_a_notification_locally_from_your_app#2980216
+        
+        // remove the pending notification requests with the UUID of the notification
+        let notificationCenter = UNUserNotificationCenter.current()
+        notificationCenter.removePendingNotificationRequests(withIdentifiers: [notification.id.uuidString])
+
         notifications.removeAll {
             $0.id == notification.id
         }
     }
     
-    public func scheduleNotification() {
-        switch notificatonSelected {
-        case .date:
-            createCalendarNotification()
-            notifications.append(NotificationItem(title: title, body: body, dateScheduled: date))
-        case .timer:
-            createTimerNotification()
-            notifications.append(NotificationItem(title: title, body: body, timeInterval: timeInterval))
-        case .location:
-            createLocationNotification()
-            notifications.append(NotificationItem(title: title, body: body, location: location))
+    private func requestNotificationPermission() async throws -> Bool {
+        return try await UNUserNotificationCenter.current().requestAuthorization(options: [.badge,.alert,.sound])
+    }
+    
+    public func scheduleNotification() async throws {
+        if try await requestNotificationPermission() {
+            switch notificatonSelected {
+            case .date:
+                let notification = NotificationItem(title: title, body: body, dateScheduled: date)
+                try await createCalendarNotification(notification)
+                notifications.append(notification)
+            case .timer:
+                let notification = NotificationItem(title: title, body: body, timeInterval: timeInterval)
+                try await createTimerNotification(notification)
+                notifications.append(notification)
+            case .location:
+                let notification = NotificationItem(title: title, body: body, location: location)
+                try await createLocationNotification(notification)
+                notifications.append(notification)
+            }
         }
     }
     
