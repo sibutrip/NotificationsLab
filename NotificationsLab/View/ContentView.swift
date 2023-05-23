@@ -24,7 +24,7 @@ struct ContentView: View {
                             let notification = vm.notifications[index]
                             VStack(alignment: .leading) {
                                 Text(notification.title)
-                                Text(notification.content)
+                                Text(notification.body)
                                     .font(.caption)
                                 Text(notification.description)
                                     .font(.caption2)

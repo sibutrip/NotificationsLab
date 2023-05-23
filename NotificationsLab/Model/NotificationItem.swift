@@ -11,7 +11,7 @@ import CoreLocation
 struct NotificationItem: Identifiable {
     let id = UUID()
     let title: String
-    let content: String
+    let body: String
     var dateScheduled: Date?
     var timeInterval: Int?
     var location: CLLocation?

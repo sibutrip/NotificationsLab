@@ -40,14 +40,14 @@ struct AddNotificationView: View {
                         }
                     }
                     TextField("Title", text: $vm.title)
-                    TextField("Content", text: $vm.content)
+                    TextField("Content", text: $vm.body)
                 }
                 Section {
                     Button("Schedule Notification") {
                         vm.scheduleNotification()
                         dismiss()
                     }
-                    .disabled(vm.title.isEmpty || vm.content.isEmpty)
+                    .disabled(vm.title.isEmpty || vm.body.isEmpty)
                     .frame(maxWidth: .infinity, alignment: .center)
                 }
             }

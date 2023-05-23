@@ -30,7 +30,7 @@ class ViewModel: NSObject, ObservableObject {
     @Published var mapArea = MKMapRect()
     
     @Published var title = String()
-    @Published var content = String()
+    @Published var body = String()
     
     var location: CLLocation? {
         locationManager.location
@@ -39,8 +39,6 @@ class ViewModel: NSObject, ObservableObject {
     private func createCalendarNotification() {
         // TODO: Create a calendar notification
         // https://developer.apple.com/documentation/usernotifications/scheduling_a_notification_locally_from_your_app
-        
-        
         
     }
     private func createTimerNotification() {
@@ -64,13 +62,13 @@ class ViewModel: NSObject, ObservableObject {
         switch notificatonSelected {
         case .date:
             createCalendarNotification()
-            notifications.append(NotificationItem(title: title, content: content, dateScheduled: date))
+            notifications.append(NotificationItem(title: title, body: body, dateScheduled: date))
         case .timer:
             createTimerNotification()
-            notifications.append(NotificationItem(title: title, content: content, timeInterval: timeInterval))
+            notifications.append(NotificationItem(title: title, body: body, timeInterval: timeInterval))
         case .location:
             createLocationNotification()
-            notifications.append(NotificationItem(title: title, content: content, location: location))
+            notifications.append(NotificationItem(title: title, body: body, location: location))
         }
     }
     
