@@ -46,7 +46,7 @@ struct AddNotificationView: View {
             }
             if vm.scheduleAtATime || vm.scheduleAtALocation || vm.scheduleAtAnInterval {
                 Button("Schedule Notification") {
-                    
+                    vm.scheduleNotification()
                 }
                 .frame(maxWidth: .infinity)
                 .frame(alignment: .center)

@@ -23,12 +23,13 @@ class ViewModel: NSObject, ObservableObject {
     @Published var scheduleAtALocation = false
     @Published var mapArea = MKMapRect()
     
-    func scheduleNotification() {
-        // code the logic here.
-    }
-    
     var location: CLLocation? {
         locationManager.location
+    }
+    
+    func scheduleNotification() {
+        // TODO: schedule the local notifications: 1- Calendar notification, 2- Time interval notification 3- Location notification.
+        // https://developer.apple.com/documentation/usernotifications/scheduling_a_notification_locally_from_your_app
     }
     
     func createActivity(for activity: String, at date: Date, isRepeating: Bool) {
