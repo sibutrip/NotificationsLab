@@ -38,14 +38,16 @@ struct AddNotificationView: View {
                                 Text("\($0.description) min")
                             }
                         }
-                        
                     }
+                    TextField("Title", text: $vm.title)
+                    TextField("Content", text: $vm.content)
                 }
                 Section {
                     Button("Schedule Notification") {
                         vm.scheduleNotification()
                         dismiss()
                     }
+                    .disabled(vm.title.isEmpty || vm.content.isEmpty)
                     .frame(maxWidth: .infinity, alignment: .center)
                 }
             }

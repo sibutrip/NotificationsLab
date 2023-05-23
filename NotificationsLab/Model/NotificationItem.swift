@@ -10,12 +10,14 @@ import CoreLocation
 
 struct NotificationItem: Identifiable {
     let id = UUID()
+    let title: String
+    let content: String
     var dateScheduled: Date?
     var timeInterval: Int?
     var location: CLLocation?
     var description: String {
         if dateScheduled != nil {
-            return ("date scheduled: \(dateScheduled!.description(with: .autoupdatingCurrent))")
+            return ("date scheduled: \(dateScheduled!.formatted())")
         }
         if timeInterval != nil {
             return ("time interval scheduled:  \(timeInterval!.description) mins")

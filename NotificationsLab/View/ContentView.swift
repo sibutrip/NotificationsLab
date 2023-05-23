@@ -22,10 +22,16 @@ struct ContentView: View {
                     List {
                         ForEach(0..<vm.notifications.count, id: \.self) { index in
                             let notification = vm.notifications[index]
-                            VStack {
+                            VStack(alignment: .leading) {
+                                Text(notification.title)
+                                Text(notification.content)
+                                    .font(.caption)
                                 Text(notification.description)
+                                    .font(.caption2)
                             }
-                        }.onDelete { index in
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        }
+                        .onDelete { index in
                             let notification = vm.notifications[index.first!]
                             vm.cancelNotification(notification)
                         }
