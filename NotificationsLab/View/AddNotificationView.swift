@@ -43,6 +43,7 @@ struct AddNotificationView: View {
                     Button("Schedule Notification") {
                         vm.scheduleNotification()
                     }
+                    .frame(maxWidth: .infinity, alignment: .center)
                 }
             }
             .navigationTitle("Create a Notification")

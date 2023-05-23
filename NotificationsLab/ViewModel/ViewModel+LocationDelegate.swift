@@ -15,16 +15,15 @@ extension ViewModel: CLLocationManagerDelegate {
         switch manager.authorizationStatus {
             
         case .notDetermined:
-            print("not determined")
+            return
         case .restricted:
-            print("restricted")
+            return
         case .denied:
-            print("denied")
+            return
         case .authorizedAlways, .authorizedWhenInUse:
-            print("authorized always")
             self.mapArea = MKMapRect(origin: MKMapPoint(manager.location!.coordinate), size: .init(width: 2500, height: 2500))
         @unknown default:
-            print("unknown")
+            return
         }
     }
     

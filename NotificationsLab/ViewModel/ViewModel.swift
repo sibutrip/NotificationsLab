@@ -14,7 +14,9 @@ class ViewModel: NSObject, ObservableObject {
     
     enum NotificationSelection: String, CaseIterable, Identifiable {
         var id: String { self.rawValue }
-        case date, timer, location
+        case date = "Date"
+        case timer = "Timer"
+        case location = "Current Location"
     }
     
     private let locationManager = CLLocationManager()
@@ -48,10 +50,13 @@ class ViewModel: NSObject, ObservableObject {
         switch notificatonSelected {
         case .date:
             createCalendarNotification()
+            notifications.append(Notification(dateScheduled: date))
         case .timer:
             createTimerNotification()
+            notifications.append(Notification(timeInterval: timeInterval))
         case .location:
             createLocationNotification()
+            notifications.append(Notification(location: location))
         }
     }
     

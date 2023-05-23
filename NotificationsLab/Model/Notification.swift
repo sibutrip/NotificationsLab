@@ -15,11 +15,15 @@ struct Notification: Identifiable {
     var location: CLLocation?
     var description: String {
         if dateScheduled != nil {
-            return dateScheduled!.description
+            return ("date scheduled: \(dateScheduled!.description(with: .autoupdatingCurrent))")
         }
         if timeInterval != nil {
-            return timeInterval!.description
+            return ("time interval scheduled:  \(timeInterval!.description) mins")
         }
-        return location!.description
+        if let location = location {
+            return ("location scheduled:  \(location.description)")
+        } else {
+            return "No Location"
+        }
     }
 }
