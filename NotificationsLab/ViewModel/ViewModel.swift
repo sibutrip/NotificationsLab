@@ -36,21 +36,25 @@ class ViewModel: NSObject, ObservableObject {
         locationManager.location
     }
     
-    private func createCalendarNotification() {
+    private func requestNotificationPermission() async throws -> Bool {
+        return try await UNUserNotificationCenter.current().requestAuthorization()
+    }
+    
+    private func createCalendarNotification(_ notification: NotificationItem) {
         // TODO: Create a calendar notification
         // https://developer.apple.com/documentation/usernotifications/scheduling_a_notification_locally_from_your_app
         
     }
-    private func createTimerNotification() {
+    private func createTimerNotification(_ notification: NotificationItem) {
         // TODO: Create a time interval notification
         // https://developer.apple.com/documentation/usernotifications/scheduling_a_notification_locally_from_your_app
     }
-    func createLocationNotification() {
+    private func createLocationNotification(_ notification: NotificationItem) {
         // TODO: Create a location-based notification
         // https://developer.apple.com/documentation/usernotifications/scheduling_a_notification_locally_from_your_app
     }
     
-    func cancelNotification(_ notification: NotificationItem) {
+    public func cancelNotification(_ notification: NotificationItem) {
         // TODO: Cancel the scheduled notification request
         // https://developer.apple.com/documentation/usernotifications/scheduling_a_notification_locally_from_your_app#2980216
         notifications.removeAll {
@@ -58,17 +62,22 @@ class ViewModel: NSObject, ObservableObject {
         }
     }
     
-    public func scheduleNotification() {
-        switch notificatonSelected {
-        case .date:
-            createCalendarNotification()
-            notifications.append(NotificationItem(title: title, body: body, dateScheduled: date))
-        case .timer:
-            createTimerNotification()
-            notifications.append(NotificationItem(title: title, body: body, timeInterval: timeInterval))
-        case .location:
-            createLocationNotification()
-            notifications.append(NotificationItem(title: title, body: body, location: location))
+    public func scheduleNotification() async throws {
+        if try await requestNotificationPermission() {
+            switch notificatonSelected {
+            case .date:
+                let notification = NotificationItem(title: title, body: body, dateScheduled: date)
+                createCalendarNotification(notification)
+                notifications.append(notification)
+            case .timer:
+                let notification = NotificationItem(title: title, body: body, timeInterval: timeInterval)
+                createTimerNotification(notification)
+                notifications.append(notification)
+            case .location:
+                let notification = NotificationItem(title: title, body: body, location: location)
+                createLocationNotification(notification)
+                notifications.append(notification)
+            }
         }
     }
     

@@ -44,7 +44,11 @@ struct AddNotificationView: View {
                 }
                 Section {
                     Button("Schedule Notification") {
-                        vm.scheduleNotification()
+                        
+                        // TODO: (bonus) Could we handle this try! expression in a safer way?
+                        Task {
+                            try! await vm.scheduleNotification()
+                        }
                         dismiss()
                     }
                     .disabled(vm.title.isEmpty || vm.body.isEmpty)
