@@ -21,10 +21,15 @@ extension ViewModel: CLLocationManagerDelegate {
         case .denied:
             return
         case .authorizedAlways, .authorizedWhenInUse:
-            self.mapArea = MKMapRect(origin: MKMapPoint(manager.location!.coordinate), size: .init(width: 2500, height: 2500))
+            manager.startUpdatingLocation()
         @unknown default:
             return
         }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        self.mapArea = MKMapRect(origin: MKMapPoint(locations[0].coordinate), size: MKMapSize(width: 2500, height: 2500))
+        manager.stopUpdatingLocation()
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
