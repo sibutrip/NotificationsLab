@@ -37,7 +37,7 @@ class ViewModel: NSObject, ObservableObject {
     }
     
     private func requestNotificationPermission() async throws -> Bool {
-        return try await UNUserNotificationCenter.current().requestAuthorization()
+        return try await UNUserNotificationCenter.current().requestAuthorization(options: [.badge,.alert,.sound])
     }
     
     private func createCalendarNotification(_ notification: NotificationItem) {
