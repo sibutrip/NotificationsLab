@@ -10,3 +10,6 @@
 - Complete the 1 ViewModel function that cancels pending notifications
   - cancelNotification
 - BONUS: Handle the try! expression in AddNotificationView in a safer way. (Hint: What information does the user need to be presented with when an action fails? How do we present that information?)
+
+Human Interface Guidelines: 
+- https://developer.apple.com/design/human-interface-guidelines/notifications
